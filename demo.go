@@ -40,6 +40,8 @@ func main() {
 			rows, err := db.Query("SELECT COUNT(*) FROM messages")
 			if err != nil {
 				log.Println("Cannot query with error:", err)
+				time.sleep(time.Second)
+				continue
 			}
 			if rows.Next() {
 				if err := rows.Scan(&count); err != nil {
