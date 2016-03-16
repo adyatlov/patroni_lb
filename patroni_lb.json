@@ -1,0 +1,55 @@
+{
+  "id": "/patroni-lb",
+  "constraints": [
+    [
+      "hostname",
+      "UNIQUE"
+    ]
+  ],
+  "instances": 1,
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "dyatlov/patroni_lb",
+      "forcePullImage": true,
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 5432,
+          "hostPort": 5432,
+          "protocol": "tcp"
+        },
+        {
+          "containerPort": 5433,
+          "hostPort": 5433,
+          "protocol": "tcp"
+        },
+        {
+          "containerPort": 9090,
+          "hostPort": 9090,
+          "protocol": "tcp"
+        }
+      ]
+    }
+  },
+  "acceptedResourceRoles": [
+    "slave_public"
+  ],
+  "healthChecks": [
+    {
+      "protocol": "TCP",
+      "portIndex": 0
+    },
+    {
+      "protocol": "TCP",
+      "portIndex": 1
+    }
+  ],
+  "cpus": 1,
+  "mem": 1024,
+  "env": {
+    "PATRONI_SCOPE": "patroni-demo",
+    "ZOOKEEPER_PORT": "2181",
+    "ZOOKEEPER_HOST": "master.mesos"
+  }
+}
